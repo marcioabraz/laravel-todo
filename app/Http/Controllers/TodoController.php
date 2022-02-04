@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use repository;
 use App\Models\Todo;
 use App\Services\TodoService;
 use App\Repositories\TodoRepository;
@@ -91,6 +92,7 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
+        $user = auth()->user();
         $response = $this->service->destroy($todo->id, $user->id);
 
         return redirect('/dashboard')->with(
