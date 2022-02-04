@@ -17,6 +17,7 @@ class Todo extends Model
      */
     protected $fillable = [
         'title',
+        'color',
         'is_complete',
         'user_id'
     ];
@@ -29,7 +30,6 @@ class Todo extends Model
     protected $casts = [
         'title' => 'string',
         'color' => 'string',
-        'is_complete' => 'boolean',
         'user_id' => 'integer'
     ];
 
