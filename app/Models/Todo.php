@@ -30,6 +30,7 @@ class Todo extends Model
     protected $casts = [
         'title' => 'string',
         'color' => 'string',
+        'is_complete'=>'boolean',
         'user_id' => 'integer'
     ];
 
