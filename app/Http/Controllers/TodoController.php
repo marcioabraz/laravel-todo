@@ -52,8 +52,8 @@ class TodoController extends Controller
 
         $attributes = $request->only([
             'title',
-            'description',
-            'color'
+            'color',
+            'is_complete'
         ]);
 
         $attributes['user_id'] = $user->id;
