@@ -123,4 +123,35 @@ class TodoService
             'message' => 'TODO deletado com sucesso'
         ];
     }
+    public function update($novo,int $id, int $userId)
+    {
+        DB::beginTransaction();
+        try {
+            $todo = $this->repository->find($id);
+
+            // Verificar se TODO é do usuário
+            if ($todo->user_id !== $userId) {
+                DB::rollback();
+                return [
+                    'success' => false,
+                    'message' => 'Erro ao encontrar TODO'
+                ];
+            }
+
+            $this->repository->update($novo, $todo->id);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            logger()->error($th);
+            return [
+                'success' => false,
+                'message' => 'Erro ao alterar TODO'
+            ];
+        }
+
+        DB::commit();
+        return [
+            'success' => true,
+            'message' => 'TODO alterado com sucesso'
+        ];
+    }
 }

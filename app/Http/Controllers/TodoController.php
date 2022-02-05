@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use repository;
 use App\Models\Todo;
+use Illuminate\Http\Request;
 use App\Services\TodoService;
 use App\Repositories\TodoRepository;
 use App\Http\Requests\StoreTodoRequest;
+use App\Http\Requests\UpdateTodoRequest;
 
 class TodoController extends Controller
 {
@@ -94,6 +96,35 @@ class TodoController extends Controller
     {
         $user = auth()->user();
         $response = $this->service->destroy($todo->id, $user->id);
+
+        return redirect('/dashboard')->with(
+            $response['success'] ? 'success' : 'error',
+            $response['message']
+        );
+    }
+    public function edit($id)
+    {
+        $user = auth()->user();
+        $todo = Todo::find($id);
+        if ($todo->user_id != $user->id){
+            abort(404);
+        }
+        return view('edit', compact('todo'));
+        
+    }
+    public function update(UpdateTodoRequest $request, Todo $todo)
+    {
+        $user = auth()->user();
+        if ($todo->user_id != $user->id){
+            return false;
+        }
+        $novo = [
+            'title'=> $request->title,
+            'color'=> $request->color,
+
+        ];
+
+        $response = $this->service->update($novo, $todo->id, $user->id);
 
         return redirect('/dashboard')->with(
             $response['success'] ? 'success' : 'error',
